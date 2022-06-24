@@ -1,0 +1,4 @@
+arm-linux-gnueabi-readelf -a file.so
+arm-linux-gnueabi-objdump -d libcurl.so > outfile.txt
+arm-linux-gnueabi-strings -n 5 libcurl.so > strings.txt
+cat strings.out | grep curl > curl-strings.txt

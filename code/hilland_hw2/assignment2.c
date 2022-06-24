@@ -6,34 +6,30 @@ const char *argp_program_version = "1.0.0.dev1";
 
 const char *argp_program_bug_address = "jhilland@unm.edu";
 
-/* This structure is used by main to communicate with parse_opt. */
 struct arguments {
     char *url;
     bool post;
     bool get;
+    bool put;
+    bool delete;
 };
 
-/*
-OPTIONS.  Field 1 in ARGP.
-Order of fields: {NAME, KEY, ARG, FLAGS, DOC}.
-*/
 static struct argp_option options[] = {
-    {"url", 'u', "http://localhost:8000", 0, "URL for HTTP Request"},
-    {"post", 'o', 0, 0, "POST HTTP Request"},
-    {"get", 'g', 0, 0, "GET HTTP Request"},
+    {"url", 'u', "String", 0, "URL for HTTP Request"},
+    {"post", 'o', 0, OPTION_ARG_OPTIONAL, "POST HTTP Request"},
+    {"get", 'g', 0, OPTION_ARG_OPTIONAL, "GET HTTP Request"},
+    {"put", 'p', 0, OPTION_ARG_OPTIONAL, "GET HTTP Request"},
+    {"delete", 'd', 0, OPTION_ARG_OPTIONAL, "GET HTTP Request"},
     {0}
 };
 
-/*
-PARSER. Field 2 in ARGP.
-Order of parameters: KEY, ARG, STATE.
-*/
 static error_t parse_opt(int key, char *arg, struct argp_state *state) {
     struct arguments *arguments = state->input;
 
     switch (key) {
         case 'u':
             arguments->url = arg;
+            printf("url: %s\n", arguments->url);
             break;
         case 'o':
             arguments->post = true;
@@ -43,7 +39,11 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
             arguments->get = true;
             printf("get\n");
             break;
-        case ARGP_KEY_ARG:
+        case ARGP_KEY_END:
+            if (arguments->url == NULL) {
+                printf("Missing required url, please provide to continue\n");
+                argp_usage (state);
+            }
             break;
         default:
             return ARGP_ERR_UNKNOWN;
@@ -51,46 +51,27 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
     return 0;
 }
 
-/*
-ARGS_DOC. Field 3 in ARGP.
-A description of the non-option command-line arguments
-    that we accept.
-*/
-static char args_doc[] = "ARG1 ARG2";
+static char args_doc[] = "-u http://localhost:8080 -o";
 
-/*
-DOC.  Field 4 in ARGP.
-Program documentation.
-*/
-static char doc[] = "Test ";
+static char doc[] = "Provide a url and conduct a get, post, delete or put request.";
 
-/*
-The ARGP structure itself.
-*/
 static struct argp argp = {options, parse_opt, args_doc, doc};
 
-/*
-The main function.
-Notice how now the only function call needed to process
-all command-line options and arguments nicely
-is argp_parse.
-*/
 int main(int argc, char **argv) {
     struct arguments arguments;
     FILE *outstream;
 
     /* Set argument defaults */
-    arguments.url = "";
+    arguments.url = NULL;
     arguments.post = false;
     arguments.get = false;
+    arguments.put = false;
+    arguments.delete = false;
 
     /* Where the magic happens */
     argp_parse(&argp, argc, argv, 0, 0, &arguments);
 
     outstream = stdout;
-
-    /* Print argument values */
-    fprintf(outstream, "url = %s\n", arguments.url);
 
     return 0;
 }

@@ -9,7 +9,7 @@ LIBS=-lcurl -uClibc -lc
 
 SRC=assignment2.c
 OBJ=$(SRC:.c=.o)
-MAIN=test
+MAIN=hilland_curl
 
 RM=rm -rf
 

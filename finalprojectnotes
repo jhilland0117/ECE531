@@ -1,0 +1,47 @@
+buildroot to make qemu image
+cd to buildroot
+make qemu_arm_versatile_defconfig
+make nconfig to set options like ssh
+make
+run script in output/images/shellScript.sh, modify this as needed
+
+add user, test ssh, copy file over, cross compile, then scp over
+adduser -h /<username> -s /bin/sh <username>
+ssh -p 2222 <username>@localhost
+arm-linux-gnueabi-gcc -static -o test main.c
+scp -P 2222 ./test cclamb@localhost:~/ 
+
+final project notes
+
+read temperature from /var/log/heater, float in degrees C
+turn heat on/off based on program and current temperature
+write out timestamp and status to /var/log/heater
+write single line <action> : <timestamp> example <on> : <posix_time>
+
+start daemon service that can also run from command line
+process configuration file, -c and --confic_file flags
+provide help option, -h and --help
+
+config file will configure:
+https endpoint
+log file path
+any other configs
+
+accept programs via http interface
+program up to three different temperatures per day at arbitrary time
+
+report status to an outside process via http
+report actions to an outside process via http
+
+attack surfaces:
+protect your code!
+protect your image!
+config files
+function arguments
+network traffic
+music files
+documnt on paper!
+
+Extra Credit: 
+support more extensive programming
+unit tests

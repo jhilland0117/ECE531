@@ -1,0 +1,37 @@
+1. cd buildroot
+2. make qemu_arm_versatile_defconfig
+
+##################################
+output/images/.sh file
+
+#!/bin/sh
+(
+BINARIES_DIR="${0%/*}/"
+cd ${BINARIES_DIR}
+
+if [ "${1}" = "serial-only" ]; then
+    EXTRA_ARGS='-nographic'
+else
+    EXTRA_ARGS='-serial stdio'
+fi
+
+export PATH="/home/jhilland/git/buildroot-2022.05/output/host/bin:${PATH}"
+exec qemu-system-arm -M versatilepb -kernel zImage -dtb versatile-pb.dtb -drive file=rootfs.ext2,if=scsi,format=raw -append "rootwait root=/dev/sda console=ttyAMA0,115200"  -net nic,model=rtl8139 -net user,hostfwd=tcp::2222-:22 ${EXTRA_ARGS}
+)
+
+###################################
+
+3. save configuration files!! configuration written to /home/jhilland/git/buildroot-2022.05/.config
+
+4. make nconfig, to make changes
+5. add ssh: Target Packages -> Networking applications -> openssh
+6. make
+7. add hostfwrd from above script
+8. run output/images/start-qemu.sh
+9. adduser -h /<username> -s /bin/sh <username>
+	ill be using jhilland, setup a password
+	
+10. ssh -p 2222 jhilland@localhost
+	ssh-keygen -f "/home/jhilland/.ssh/known_hosts" -R "[localhost]:2222"
+	use the above IF it complains abut  mitm
+11. scp -P 2222 ./test jhilland@localhost:~/

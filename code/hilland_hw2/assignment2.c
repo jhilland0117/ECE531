@@ -7,7 +7,8 @@ const char *argp_program_version = "1.0.0.dev1";
 const char *argp_program_bug_address = "jhilland@unm.edu";
 
 struct arguments {
-    char *url;
+    char *arg;  // for string argument
+    char *url;    
     bool post;
     bool get;
     bool put;
@@ -29,7 +30,7 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
     switch (key) {
         case 'u':
             arguments->url = arg;
-            printf("url: %s\n", arguments->url);
+            printf("url, %s\n", arguments->url);
             break;
         case 'o':
             arguments->post = true;
@@ -39,6 +40,14 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
             arguments->get = true;
             printf("get\n");
             break;
+        case ARGP_KEY_ARG:
+            if (state->arg_num > 1) {
+                printf("Too many arguments, use 'quotes around your extra argument'");
+                argp_usage(state);
+                break;
+            }
+            arguments->arg = arg;
+            printf("arg, %s\n", arg);
         case ARGP_KEY_END:
             if (arguments->url == NULL) {
                 printf("Missing required url, please provide to continue\n");
@@ -51,7 +60,7 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
     return 0;
 }
 
-static char args_doc[] = "-u http://localhost:8080 -o";
+static char args_doc[] = "-u http://localhost:8080 -o 'argument to pass'";
 
 static char doc[] = "Provide a url and conduct a get, post, delete or put request.";
 

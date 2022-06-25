@@ -5,7 +5,7 @@ CFLAGS=--sysroot=$(BUILDROOT_HOME)/output/staging
 INCLUDES=
 LFLAGS=
 
-LIBS=-lcurl -uClibc -lc
+LIBS=-lcurl -uClibc -lc -largp
 
 SRC=assignment2.c
 OBJ=$(SRC:.c=.o)

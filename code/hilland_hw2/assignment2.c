@@ -10,7 +10,6 @@
 
 const char *argp_program_version = "1.0.0.dev1";
 const char *argp_program_bug_address = "jhilland@unm.edu";
-struct curl_slist *headers = NULL;
 
 // arguments will be used for storing values from command line
 struct Arguments {
@@ -58,7 +57,6 @@ static int send_post_request(char *url, char *message) {
     CURL *curl = curl_easy_init();
     if (curl) {
         CURLcode res;
-        headers = curl_slist_append(headers, "Content-Type: application/json");
         curl_easy_setopt(curl, CURLOPT_URL, url);
         curl_easy_setopt(curl, CURLOPT_POSTFIELDS, message);
         res = curl_easy_perform(curl);
@@ -79,7 +77,6 @@ static int send_put_request(char *url, char *message) {
     CURL *curl = curl_easy_init();
     if (curl) {
         CURLcode res;
-        headers = curl_slist_append(headers, "Content-Type: application/json");
         curl_easy_setopt(curl, CURLOPT_URL, url);
         curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "PUT");
         curl_easy_setopt(curl, CURLOPT_POSTFIELDS, message);
@@ -103,6 +100,7 @@ static int send_delete_request(char *url, char *message) {
         CURLcode res;
         curl_easy_setopt(curl, CURLOPT_URL, url);
         curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "DELETE");
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, message);
         res = curl_easy_perform(curl);
 
         if (res != CURLE_OK) {
@@ -153,16 +151,16 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
             break;
         case ARGP_KEY_SUCCESS:
             if (arguments->get) {
-                send_get_request(arguments->url);
+                int err = send_get_request(arguments->url);
                 break;
             } else if (arguments->post) {
-                send_post_request(arguments->url, arguments->arg);
+                int err = send_post_request(arguments->url, arguments->arg);
                 break;
             } else if (arguments->put) {
-                send_put_request(arguments->url, arguments->arg);
+                int err = send_put_request(arguments->url, arguments->arg);
                 break;
             } else if (arguments->delete) {
-                send_delete_request(arguments->url, arguments->arg);
+                int err = send_delete_request(arguments->url, arguments->arg);
                 break;
             }
             break;

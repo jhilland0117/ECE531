@@ -11,7 +11,6 @@
 const char *argp_program_version = "1.0.0.dev1";
 const char *argp_program_bug_address = "jhilland@unm.edu";
 struct curl_slist *headers = NULL;
-CURL *curl;
 
 // arguments will be used for storing values from command line
 struct Arguments {
@@ -35,7 +34,8 @@ static struct argp_option options[] = {
 
 // http request methods, improve by making one method takes method type as param
 static int send_get_request(char *url) {
-    printf("sending get request at url: %s and message: %s\n", url);
+    printf("sending get request at url: %s", url);
+    CURL *curl = curl_easy_init();
     if (curl) {
         CURLcode res;
         curl_easy_setopt(curl, CURLOPT_URL, url);
@@ -55,6 +55,7 @@ static int send_get_request(char *url) {
 
 static int send_post_request(char *url, char *message) {
     printf("sending post request at url: %s and message: %s\n", url, message);
+    CURL *curl = curl_easy_init();
     if (curl) {
         CURLcode res;
         headers = curl_slist_append(headers, "Content-Type: application/json");
@@ -75,6 +76,7 @@ static int send_post_request(char *url, char *message) {
 
 static int send_put_request(char *url, char *message) {
     printf("sending put request at url: %s and message: %s\n", url, message);
+    CURL *curl = curl_easy_init();
     if (curl) {
         CURLcode res;
         headers = curl_slist_append(headers, "Content-Type: application/json");
@@ -96,6 +98,7 @@ static int send_put_request(char *url, char *message) {
 
 static int send_delete_request(char *url, char *message) {
     printf("sending delete request at url: %s and message: %s\n", url, message);
+    CURL *curl = curl_easy_init();
     if (curl) {
         CURLcode res;
         curl_easy_setopt(curl, CURLOPT_URL, url);
@@ -135,7 +138,7 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
             break;
         case ARGP_KEY_ARG:
             if (state->arg_num > 1) {
-                printf("Too many arguments, use 'quotes around your extra argument'");
+                printf("Too many arguments, use quotes around your extra argument\n");
                 argp_usage(state);
                 break;
             }
@@ -150,14 +153,17 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
             break;
         case ARGP_KEY_SUCCESS:
             if (arguments->get) {
-                printf("sending get request\n");
                 send_get_request(arguments->url);
+                break;
             } else if (arguments->post) {
                 send_post_request(arguments->url, arguments->arg);
+                break;
             } else if (arguments->put) {
                 send_put_request(arguments->url, arguments->arg);
+                break;
             } else if (arguments->delete) {
                 send_delete_request(arguments->url, arguments->arg);
+                break;
             }
             break;
         default:
@@ -181,9 +187,6 @@ int main(int argc, char **argv) {
     arguments.get = false;
     arguments.put = false;
     arguments.delete = false;
-
-    // setup curl object
-    curl = curl_easy_init();
 
     // parse the arguments
     argp_parse(&argp, argc, argv, 0, 0, &arguments);

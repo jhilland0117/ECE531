@@ -11,7 +11,6 @@
 
 /* Hilland, Joseph ECE 531 Homework assignment 2
  * Takes command line options and conducts http request based on parameters.
- * Code is not in production state, improvements can be made by consolidating code.
  */
 
 const char *argp_program_version = "1.0.0.dev1";

@@ -98,7 +98,7 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
             }
         case ARGP_KEY_ARG:
             // if too many arguments are given, notify user
-            if (state->arg_num > 1) {
+            if (state->arg_num >= 1) {
                 printf("Too many arguments, use quotes around your extra argument.\n");
                 argp_usage(state);
                 return REQ_ERR;

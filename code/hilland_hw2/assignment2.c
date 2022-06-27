@@ -1,3 +1,5 @@
+// for standard gcc: make -f make-gcc
+// for arm: make -f make-arm
 #include <stdio.h>
 #include <argp.h>
 #include <stdbool.h>

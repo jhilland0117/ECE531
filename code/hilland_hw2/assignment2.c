@@ -16,6 +16,8 @@
 
 const char *argp_program_version = "1.0.0.dev1";
 const char *argp_program_bug_address = "jhilland@unm.edu";
+static char args_doc[] = "-u http://localhost:8000 -o 'argument to pass'";
+static char doc[] = "Provide a url and conduct a get, post, delete or put request.";
 
 // arguments will be used for storing values from command line
 struct Arguments {
@@ -34,17 +36,22 @@ static struct argp_option options[] = {
     {"get", 'g', NO_ARG, NO_ARG, "GET HTTP Request"},
     {"put", 'p', NO_ARG, NO_ARG, "GET HTTP Request, requires VERB"},
     {"delete", 'd', NO_ARG, NO_ARG, "GET HTTP Request, requires VERB"},
-    {0}
+    {NO_ARG}
 };
 
-// http get, no message required per this assignment
-static int send_get_request(char *url) {
-    printf("sending get request at url: %s", url);
+static int send_http_requeset(char *url, char *message, char *type, bool verb) {
+    printf("sending %s request at url: %s\n", type, url);
     CURL *curl = curl_easy_init();
     if (curl) {
         CURLcode res;
         curl_easy_setopt(curl, CURLOPT_URL, url);
-        curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+        curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, type);
+        if (verb) {
+            printf("sending message: %s\n", message);
+            curl_easy_setopt(curl, CURLOPT_POSTFIELDS, message);
+        } else {
+            curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+        }
         res = curl_easy_perform(curl);
 
         if (res != CURLE_OK) {
@@ -58,69 +65,10 @@ static int send_get_request(char *url) {
     return OK;
 }
 
-// http post, message provided as post parameters
-static int send_post_request(char *url, char *message) {
-    printf("sending post request at url: %s and message: %s\n", url, message);
-    CURL *curl = curl_easy_init();
-    if (curl) {
-        CURLcode res;
-        curl_easy_setopt(curl, CURLOPT_URL, url);
-        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, message);
-        res = curl_easy_perform(curl);
-
-        if (res != CURLE_OK) {
-            return REQ_ERR;
-        }
-
-        curl_easy_cleanup(curl);
-    } else {
-        return INIT_ERR;
-    }
-    return OK;
-}
-
-// http put, message provided as put parameters
-static int send_put_request(char *url, char *message) {
-    printf("sending put request at url: %s and message: %s\n", url, message);
-    CURL *curl = curl_easy_init();
-    if (curl) {
-        CURLcode res;
-        curl_easy_setopt(curl, CURLOPT_URL, url);
-        curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "PUT");
-        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, message);
-        res = curl_easy_perform(curl);
-
-        if (res != CURLE_OK) {
-            return REQ_ERR;
-        }
-
-        curl_easy_cleanup(curl);
-    } else {
-        return INIT_ERR;
-    }
-    return OK;
-}
-
-// http delete, message provided as parameters
-static int send_delete_request(char *url, char *message) {
-    printf("sending delete request at url: %s and message: %s\n", url, message);
-    CURL *curl = curl_easy_init();
-    if (curl) {
-        CURLcode res;
-        curl_easy_setopt(curl, CURLOPT_URL, url);
-        curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "DELETE");
-        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, message);
-        res = curl_easy_perform(curl);
-
-        if (res != CURLE_OK) {
-            return REQ_ERR;
-        }
-
-        curl_easy_cleanup(curl);
-    } else {
-        return INIT_ERR;
-    }
-    return OK;
+int handle_requirement_error(char* message, struct argp_state *state) {
+    printf(message);
+    argp_usage(state);
+    return REQ_ERR;
 }
 
 // function to parse commandline options and arguments
@@ -144,13 +92,12 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
             arguments->delete = true;
             break;
         case ARGP_KEY_NO_ARGS:
-            // if no arguments are detected, check if verb is required
+            // check if args are required based on request type, notify user
             if (arguments->post == true || arguments->put == true || arguments->delete == true) {
-                printf("You need to supply a VERB.\n");
-                argp_usage(state);
-                return REQ_ERR;
+                return handle_requirement_error("You need to supply a VERB.\n", state);
             }
         case ARGP_KEY_ARG:
+            // if too many arguments are given, notify user
             if (state->arg_num > 1) {
                 printf("Too many arguments, use quotes around your extra argument.\n");
                 argp_usage(state);
@@ -159,24 +106,28 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
             arguments->arg = arg;
             break;
         case ARGP_KEY_END:
+            // if url is null or malformed, notify user
             if (arguments->url == NULL) {
-                printf("Please provide a valid urnl.\n");
+                printf("Please provide a valid url.\n");
                 argp_usage(state);
                 return REQ_ERR;
+            } else if (arguments->get == false && arguments->post == false && arguments->put == false && arguments->delete == false) {
+                return handle_requirement_error("You must select http request type.\n", state);
             }
             break;
         case ARGP_KEY_SUCCESS:
+            // perform request based on type, should this be limited to only one type allowed...
             if (arguments->get) {
-                int err = send_get_request(arguments->url);
+                int err = send_http_requeset(arguments->url, NULL, "GET", false);
                 break;
             } else if (arguments->post) {
-                int err = send_post_request(arguments->url, arguments->arg);
+                int err = send_http_requeset(arguments->url, arguments->arg, "POST", true);
                 break;
             } else if (arguments->put) {
-                int err = send_put_request(arguments->url, arguments->arg);
+                int err = send_http_requeset(arguments->url, arguments->arg, "PUT", true);
                 break;
             } else if (arguments->delete) {
-                int err = send_delete_request(arguments->url, arguments->arg);
+                int err = send_http_requeset(arguments->url, arguments->arg, "DELETE", true);
                 break;
             }
             break;
@@ -185,10 +136,6 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
     }
     return 0;
 }
-
-static char args_doc[] = "-u http://localhost:8000 -o 'argument to pass'";
-
-static char doc[] = "Provide a url and conduct a get, post, delete or put request.";
 
 static struct argp argp = {options, parse_opt, args_doc, doc};
 

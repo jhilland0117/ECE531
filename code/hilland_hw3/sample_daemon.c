@@ -18,9 +18,9 @@
 
 // make project, make -f make-gcc
 // find and kill process
-// ps -ef | grep test
-// kill -9 pid
-// watch output, less /var/log/syslog
+// ps -ef | grep sampled
+// kill -9 pid, or killall sampled
+// watch output, less /var/log/syslog, /var/log/messages
 // move to /usr/sbin on image
 
 static void _signal_handler(const int signal) {

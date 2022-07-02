@@ -4,11 +4,11 @@ CC=gcc
 CCFLAGS=
 INCLUDES=
 LFLAGS=-L/usr/lib/x86_64-linux-gnu
-LIBS=-lcurl -lpthread
+LIBS=
 
 SRC=sample_daemon.c
 OBJ=$(SRC:.c=.o)
-MAIN=test
+MAIN=sampled
 
 RM=rm -rf
 

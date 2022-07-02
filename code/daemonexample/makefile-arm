@@ -5,11 +5,11 @@ CFLAGS=--sysroot=$(BUILDROOT_HOME)/output/staging
 INCLUDES=
 LFLAGS=
 
-LIBS=-lcurl -uClibc -lc
+LIBS=
 
 SRC=sample_daemon.c
 OBJ=$(SRC:.c=.o)
-MAIN=test
+MAIN=sampled
 
 RM=rm -rf
 

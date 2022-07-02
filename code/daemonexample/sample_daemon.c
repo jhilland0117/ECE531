@@ -15,9 +15,12 @@
 #define ERR_WTF         9
 #define DAEMON_NAME     "Test_daemon"
 
+// make project, make -f make-gcc
 // find and kill process
 // ps -ef | grep test
 // kill -9 pid
+// watch output, less /var/log/syslog
+// move to /usr/sbin on image
 
 static void _signal_handler(const int signal) {
     switch (signal) {

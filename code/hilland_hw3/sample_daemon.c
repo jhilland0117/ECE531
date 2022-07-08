@@ -20,6 +20,7 @@
 // find and kill process
 // ps -ef | grep sampled
 // kill -9 pid, or killall sampled
+// chmod 755 filename
 // watch output, less /var/log/syslog, /var/log/messages
 // move to /usr/sbin on image
 

@@ -1,0 +1,63 @@
+attach surface and things to consider with IoT devices
+
+securing the boot
+
+Authority of software/hardware->
+creates public private key, public key loaded into hardware
+private key loaded into phase 1 bootloader
+public keys enrouted in route of trust in hareware at manufacture time
+auth -> Phase1 -> HW to check key -> phase2 -> ... -> OS loaded
+
+securing the kernel
+NOT going to fix kernel, not kernel dev
+responsible for choosing a secure kernel
+responsible for keeping it secure
+dont use buggy, old, known issue, out of date code
+maintenance and analysis will need to continue, things change
+dont create your own protocols or encryption, liability
+make sure you can fix vulnerabilities WHEN they come up
+
+securing your application
+typical flaws:
+buffer overflows
+integer underflows
+bad coding practices
+web:
+encryption
+authentication
+authorization
+known resources
+c secure programming standard
+SANS top 20
+OWASP secure programming practices
+code reviews
+red teams
+continuous integration
+unit testing
+red teams, adversarial design and review
+attack! penetration testing
+dont DIY
+other eyes == better
+study secure coding
+
+attack vectors to consider:
+ssh access
+kernel version
+libraries in code used, env variables read
+buffer overflows/underflows
+validating input
+add unit tests
+continuous integration for libraries/kernels
+configuration files, function arguments, 
+network traffic (big HTTP document or malformed)
+PKI, public/private keys
+
+how to harden:
+check for well-formed env variables
+check buffer lengths
+function calls that dont implicitly accept a buffer length
+well-formatted submitted data
+check for odd characters, binary code, huge arguments,
+inconsistent arguments, anything that might break system
+check welformed data with http
+never trust user input

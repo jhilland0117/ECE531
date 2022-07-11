@@ -13,14 +13,14 @@
 DAEMON_NAME="sampled"
 
 start() {
-    printf "Starting $DAEMON_NAME: "
+    printf 'Starting %s: ' "$DAEMON_NAME"
     /usr/sbin/$DAEMON_NAME
     touch /var/lock/$DAEMON_NAME
     echo "OK"
 }
 
 stop() {
-    printf "Stopping $DAEMON_NAME: "
+    printf 'Stopping %s: ' "$DAEMON_NAME"
     killall $DAEMON_NAME
     rm -f /var/lock/$DAEMON_NAME
     echo "OK"

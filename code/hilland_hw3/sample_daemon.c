@@ -6,6 +6,8 @@
 #include <string.h>
 #include <syslog.h>
 #include <time.h>
+#include <errno.h>
+#include <assert.h>
 
 #define OK              0
 #define ERR_SETSID      1
@@ -16,6 +18,7 @@
 #define ERR_WTF         9
 #define DAEMON_NAME     "Test_daemon"
 
+// comments for myself that would not be left in production code
 // make project, make -f make-gcc
 // find and kill process
 // ps -ef | grep sampled
@@ -35,6 +38,8 @@ static void _signal_handler(const int signal) {
             break;
         default:
             syslog(LOG_INFO, "received unhandled signal");
+            closelog();
+            exit(ERR_WTF);
     }
 }
 
@@ -53,19 +58,29 @@ int main() {
 
     syslog(LOG_INFO, "Daemon sampled");
 
+    // fork will return twice
+    // it will return -1 if it failed
+    // it will return 0 in child proc if it succeeds
+    // returns PID in parent process if it succeeds
     pid_t pid = fork();
-    // check to see if fork was successful
+
+    // exit if fork fails
     if (pid < 0) {
-        syslog(LOG_ERR, strerror(pid));
+        syslog(LOG_ERR, strerror(errno));
         return ERR_FORK;
     }
 
+    // check that parent fork returns pid of child, child
+    // fork will return success
     if (pid > 0) {
         return OK;
     }
 
-    if (setsid() < -1) {
-        syslog(LOG_ERR, strerror(pid));
+
+    // create session, set process group leader
+    pid_t sid = setsid();
+    if (sid < -1) {
+        syslog(LOG_ERR, strerror(errno));
         return ERR_SETSID;
     }
 
@@ -75,8 +90,10 @@ int main() {
 
     umask(S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 
-    if (chdir("/") < 0) {
-        syslog(LOG_ERR, strerror(pid));
+    // change to root directory for safety
+    int dir = chdir("/");
+    if (dir < 0) {
+        syslog(LOG_ERR, strerror(errno));
         return ERR_CHDIR;
     }
 

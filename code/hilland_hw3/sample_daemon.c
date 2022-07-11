@@ -18,15 +18,6 @@
 #define ERR_WTF         9
 #define DAEMON_NAME     "Test_daemon"
 
-// comments for myself that would not be left in production code
-// make project, make -f make-gcc
-// find and kill process
-// ps -ef | grep sampled
-// kill -9 pid, or killall sampled
-// chmod 755 filename
-// watch output, less /var/log/syslog, /var/log/messages
-// move to /usr/sbin on image
-
 static void _signal_handler(const int signal) {
     switch (signal) {
         case SIGHUP:
@@ -78,12 +69,12 @@ int main() {
 
 
     // create session, set process group leader
-    pid_t sid = setsid();
-    if (sid < -1) {
+    if (setsid() < -1) {
         syslog(LOG_ERR, strerror(errno));
         return ERR_SETSID;
     }
 
+    // standard to close other output/input streams
     close(STDIN_FILENO);
     close(STDOUT_FILENO);
     close(STDERR_FILENO);
@@ -91,8 +82,7 @@ int main() {
     umask(S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 
     // change to root directory for safety
-    int dir = chdir("/");
-    if (dir < 0) {
+    if (chdir("/") < 0) {
         syslog(LOG_ERR, strerror(errno));
         return ERR_CHDIR;
     }

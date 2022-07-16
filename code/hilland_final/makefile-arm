@@ -1,0 +1,25 @@
+
+BUILDROOT_HOME=/home/jhilland/git/buildroot-2022.05
+CC=$(BUILDROOT_HOME)/output/host/usr/bin/arm-linux-gcc
+CFLAGS=--sysroot=$(BUILDROOT_HOME)/output/staging
+INCLUDES=
+LFLAGS=
+
+LIBS=-lcurl -uClibc -lc -largp
+
+SRC=hillandFinal.c
+OBJ=$(SRC:.c=.o)
+MAIN=hillandFinal
+
+RM=rm -rf
+
+.c.o:
+		$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+
+$(MAIN): $(OBJ)
+		$(CC) $(CFLAGS) $(INCLUDES) -o $(MAIN) $(OBJ) $(LFLAGS) $(LIBS)
+
+all: $(MAIN)
+
+clean:
+	$(RM) $(MAIN) *.o *~

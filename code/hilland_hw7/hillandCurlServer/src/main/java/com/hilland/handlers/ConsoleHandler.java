@@ -26,7 +26,8 @@ public class ConsoleHandler extends GeneralHandler {
 
         JDBCConnection connection = new JDBCConnection();
 
-        String params = urlParams.get("id");
+        String params = urlParams.get("storeId");
+        System.out.println("HUH" + params + "\n");
         if (params != null) {
             Console console = connection.getConsole(params);
             Gson gson = new Gson();
@@ -40,4 +41,21 @@ public class ConsoleHandler extends GeneralHandler {
             return newFixedLengthResponse(jsonResp);
         }
     }
+
+    @Override
+    public Response delete(UriResource uriResource, Map<String, String> urlParams, IHTTPSession session) {
+        return super.delete(uriResource, urlParams, session); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+    }
+
+    @Override
+    public Response put(UriResource uriResource, Map<String, String> urlParams, IHTTPSession session) {
+        return super.put(uriResource, urlParams, session); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+    }
+
+    @Override
+    public Response post(UriResource uriResource, Map<String, String> urlParams, IHTTPSession session) {
+        return super.post(uriResource, urlParams, session); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+    }
+    
+    
 }

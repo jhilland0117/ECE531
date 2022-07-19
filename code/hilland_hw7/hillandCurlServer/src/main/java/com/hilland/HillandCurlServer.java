@@ -19,12 +19,9 @@ import java.util.HashMap;
  */
 public class HillandCurlServer extends RouterNanoHTTPD {
 
-    private JDBCConnection connection;
-
     public HillandCurlServer() throws IOException {
         super(8080);
         addMappings();
-        connection = new JDBCConnection();
         start(NanoHTTPD.SOCKET_READ_TIMEOUT, false);
     }
 
@@ -41,7 +38,7 @@ public class HillandCurlServer extends RouterNanoHTTPD {
     @Override
     public void addMappings() {
         addRoute("/", IndexHandler.class);
-        addRoute("/users", ConsoleHandler.class);
+        addRoute("/consoles", ConsoleHandler.class);
     }
 
 //    @Override

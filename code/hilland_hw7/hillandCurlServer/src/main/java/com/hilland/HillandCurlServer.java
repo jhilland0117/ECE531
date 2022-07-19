@@ -38,40 +38,8 @@ public class HillandCurlServer extends RouterNanoHTTPD {
     @Override
     public void addMappings() {
         addRoute("/", IndexHandler.class);
-        addRoute("/consoles*", ConsoleHandler.class);
+        addRoute("/consoles", ConsoleHandler.class);
     }
-
-//    @Override
-//    public Response serve(IHTTPSession session) {
-//        if (session.getMethod() == Method.GET) {
-//
-//            // check for single query instance
-//            String param = session.getQueryParameterString();
-//            System.out.println("GET: " + param);
-//            List<Console> consoles = connection.getConsoles();
-//            Gson gson = new Gson();
-//            String jsonResp = gson.toJson(consoles);
-//            return newFixedLengthResponse(jsonResp);
-//        } else if (session.getMethod() == Method.POST) {
-//            
-//            System.out.println("received a post");
-//            try {
-//                session.parseBody(new HashMap<>());
-//                String requestBody = session.getQueryParameterString();
-//                return newFixedLengthResponse("Request body = " + requestBody);
-//            } catch (IOException | ResponseException e) {
-//                return failedAttempt();
-//            }
-//        } else if (session.getMethod() == Method.PUT) {
-//            
-//            System.out.println("received a put");
-//        } else if (session.getMethod() == Method.DELETE) {
-//            
-//            System.out.println("received a delete");
-//        }
-//        
-//        return failedAttempt();
-//    }
 
     private Response failedAttempt() {
         // all attempts have failed

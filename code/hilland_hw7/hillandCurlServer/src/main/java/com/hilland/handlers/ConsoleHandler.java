@@ -25,21 +25,19 @@ public class ConsoleHandler extends GeneralHandler {
             IHTTPSession session) {
 
         JDBCConnection connection = new JDBCConnection();
-        System.out.println("BEFORE" + "\n");
-        String params = urlParams.get("storeId");
-        System.out.println("AFTER" + params + "\n");
-        if (params != null) {
-            Console console = connection.getConsole(params);
-            Gson gson = new Gson();
-            String jsonResp = gson.toJson(console);
-            return newFixedLengthResponse(jsonResp);
-        } else {
+//        String params = urlParams.get("storeId");
+//        if (params != null) {
+//            Console console = connection.getConsole(params);
+//            Gson gson = new Gson();
+//            String jsonResp = gson.toJson(console);
+//            return newFixedLengthResponse(jsonResp);
+//        } else {
 
-            List<Console> consoles = connection.getConsoles();
-            Gson gson = new Gson();
-            String jsonResp = gson.toJson(consoles);
-            return newFixedLengthResponse(jsonResp);
-        }
+        List<Console> consoles = connection.getConsoles();
+        Gson gson = new Gson();
+        String jsonResp = gson.toJson(consoles);
+        return newFixedLengthResponse(jsonResp);
+//        }
     }
 
     @Override
@@ -54,8 +52,7 @@ public class ConsoleHandler extends GeneralHandler {
 
     @Override
     public Response post(UriResource uriResource, Map<String, String> urlParams, IHTTPSession session) {
-        return super.post(uriResource, urlParams, session); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+        return newFixedLengthResponse("received a post");
     }
-    
-    
+
 }

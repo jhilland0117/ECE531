@@ -13,7 +13,7 @@ public class JDBCConnection {
 
     public List<Console> getConsoles() {
         List<Console> consoles = new ArrayList<>();
-        String select = "select * from Console";
+        String select = "select * from console";
 
         try ( Connection conn = DriverManager.getConnection(
                 "jdbc:mysql://127.0.0.1:3306/consoles", "root", "Brady#2019");  PreparedStatement preparedStatement = conn.prepareStatement(select)) {

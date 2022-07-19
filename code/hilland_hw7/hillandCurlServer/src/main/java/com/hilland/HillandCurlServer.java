@@ -7,6 +7,7 @@ import fi.iki.elonen.NanoHTTPD.Response;
 import java.io.IOException;
 import java.util.List;
 import com.google.gson.Gson;
+import com.hilland.handlers.ConsoleHandler;
 import fi.iki.elonen.router.RouterNanoHTTPD;
 import fi.iki.elonen.router.RouterNanoHTTPD.IndexHandler;
 import java.util.HashMap;
@@ -40,6 +41,7 @@ public class HillandCurlServer extends RouterNanoHTTPD {
     @Override
     public void addMappings() {
         addRoute("/", IndexHandler.class);
+        addRoute("/users", ConsoleHandler.class);
     }
 
     @Override

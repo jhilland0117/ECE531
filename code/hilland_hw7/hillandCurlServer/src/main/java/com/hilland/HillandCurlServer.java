@@ -38,7 +38,7 @@ public class HillandCurlServer extends RouterNanoHTTPD {
     @Override
     public void addMappings() {
         addRoute("/", IndexHandler.class);
-        addRoute("/consoles", ConsoleHandler.class);
+        addRoute("/consoles*", ConsoleHandler.class);
     }
 
 //    @Override

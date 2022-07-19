@@ -9,8 +9,6 @@ import java.util.List;
 import com.google.gson.Gson;
 import java.util.HashMap;
 
-import static fi.iki.elonen.NanoHTTPD.newFixedLengthResponse;
-
 /**
  * Base application class for setting up NanoHTTPD server.
  *
@@ -35,16 +33,22 @@ public class HillandCurlServer extends NanoHTTPD {
             System.err.println("Couldn't start server:\n" + ioe);
         }
     }
+    
+    
 
     @Override
     public Response serve(IHTTPSession session) {
         if (session.getMethod() == Method.GET) {
 
+            // check for single query instance
+            // String itemIdRequestParameter = session.getParameters().get("itemId").get(0);
+            
             List<Console> consoles = connection.getConsoles();
             Gson gson = new Gson();
             String jsonResp = gson.toJson(consoles);
             return newFixedLengthResponse(jsonResp);
         } else if (session.getMethod() == Method.POST) {
+            
             System.out.println("received a post");
             try {
                 session.parseBody(new HashMap<>());
@@ -54,8 +58,10 @@ public class HillandCurlServer extends NanoHTTPD {
                 return failedAttempt();
             }
         } else if (session.getMethod() == Method.PUT) {
+            
             System.out.println("received a put");
         } else if (session.getMethod() == Method.DELETE) {
+            
             System.out.println("received a delete");
         }
         

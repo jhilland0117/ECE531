@@ -25,9 +25,9 @@ public class ConsoleHandler extends GeneralHandler {
             IHTTPSession session) {
 
         JDBCConnection connection = new JDBCConnection();
-
+        System.out.println("BEFORE" + "\n");
         String params = urlParams.get("storeId");
-        System.out.println("HUH" + params + "\n");
+        System.out.println("AFTER" + params + "\n");
         if (params != null) {
             Console console = connection.getConsole(params);
             Gson gson = new Gson();

@@ -7,6 +7,8 @@ import fi.iki.elonen.NanoHTTPD.Response;
 import java.io.IOException;
 import java.util.List;
 import com.google.gson.Gson;
+import fi.iki.elonen.router.RouterNanoHTTPD;
+import fi.iki.elonen.router.RouterNanoHTTPD.IndexHandler;
 import java.util.HashMap;
 
 /**
@@ -14,12 +16,13 @@ import java.util.HashMap;
  *
  * @author jhilland
  */
-public class HillandCurlServer extends NanoHTTPD {
+public class HillandCurlServer extends RouterNanoHTTPD {
 
     private JDBCConnection connection;
 
     public HillandCurlServer() throws IOException {
         super(8080);
+        addMappings();
         connection = new JDBCConnection();
         start(NanoHTTPD.SOCKET_READ_TIMEOUT, false);
     }
@@ -34,7 +37,10 @@ public class HillandCurlServer extends NanoHTTPD {
         }
     }
     
-    
+    @Override
+    public void addMappings() {
+        addRoute("/", IndexHandler.class);
+    }
 
     @Override
     public Response serve(IHTTPSession session) {

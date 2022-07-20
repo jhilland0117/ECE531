@@ -14,13 +14,15 @@ public class JDBCConnection {
     public Console getConsole(String id) {
         Console console = null;
 
-        String select = "select * from console where id = " + id + ";";
-
+        String select = "select * from console where id = " + id;
+        System.out.println("running query: " + select + "\n");
         try ( Connection conn = DriverManager.getConnection(
                 "jdbc:mysql://127.0.0.1:3306/consoles", "root", "Brady#2019");  PreparedStatement preparedStatement = conn.prepareStatement(select)) {
 
             ResultSet result = preparedStatement.executeQuery();
+
             while (result.next()) {
+                System.out.println("we have a next!\n");
                 Console obj = new Console();
                 console.setId(result.getLong("ID"));
                 console.setName(result.getString("NAME"));

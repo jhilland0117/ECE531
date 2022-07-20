@@ -3,11 +3,12 @@ package com.hilland;
 import com.google.gson.Gson;
 import com.hilland.domain.Console;
 import fi.iki.elonen.NanoHTTPD;
-import static fi.iki.elonen.NanoHTTPD.MIME_PLAINTEXT;
-import static fi.iki.elonen.NanoHTTPD.newFixedLengthResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+
+import static fi.iki.elonen.NanoHTTPD.MIME_PLAINTEXT;
+import static fi.iki.elonen.NanoHTTPD.newFixedLengthResponse;
 
 /**
  *
@@ -57,7 +58,7 @@ public final class CurlCommandsUtil {
         return newFixedLengthResponse(result);
     }
 
-    private static NanoHTTPD.Response failedAttempt() {
+    public static NanoHTTPD.Response failedAttempt() {
         return newFixedLengthResponse(NanoHTTPD.Response.Status.NOT_FOUND, MIME_PLAINTEXT,
                 "The requested resource does not exist");
     }

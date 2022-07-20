@@ -19,13 +19,19 @@ public class JDBCConnection {
         try ( Connection conn = DriverManager.getConnection(
                 "jdbc:mysql://127.0.0.1:3306/consoles", "root", "Brady#2019");  PreparedStatement preparedStatement = conn.prepareStatement(select)) {
 
-            ResultSet result = preparedStatement.executeQuery();
+            ResultSet resultSet = preparedStatement.executeQuery();
 
-            while (result.next()) {
+            while (resultSet.next()) {
+                
+                System.out.println("something: " + resultSet.toString());
+                
+                long resultId = resultSet.getLong("ID");
+                String name = resultSet.getString("NAME");
+                
                 System.out.println("we have a next!\n");
                 Console obj = new Console();
-                console.setId(result.getLong("ID"));
-                console.setName(result.getString("NAME"));
+                console.setId(resultId);
+                console.setName(name);
             }
         } catch (SQLException ex) {
             System.err.format("SQL State: %s\n%s", ex.getSQLState(), ex.getMessage());

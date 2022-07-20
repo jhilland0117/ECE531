@@ -23,12 +23,12 @@ public class JDBCConnection {
             Console obj = new Console();
             console.setId(result.getLong("ID"));
             console.setName(result.getString("NAME"));
-        } catch (SQLException e) {
-            System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException ex) {
+            System.err.format("SQL State: %s\n%s", ex.getSQLState(), ex.getMessage());
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-        
+
         return console;
     }
 
@@ -60,6 +60,32 @@ public class JDBCConnection {
         }
 
         return consoles;
+    }
+
+    public String addConsole(String name) {
+        String insert = "insert into consoles (name) values (" + name + ")";
+        Connection conn = null;
+        Statement statement = null;
+        try {
+            conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/consoles", "root", "Brady#2019");
+            statement = (Statement) conn.createStatement();
+            statement.execute(insert);
+            System.out.println("adding console to database");
+        } catch (SQLException e) {
+            System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+            return "FAILED POST\n";
+        } catch (Exception e) {
+            return "FAILED POST\n";
+        }
+        return "SUCCESS POST\n";
+    }
+
+    public void updateConsole(String id, String name) {
+
+    }
+
+    public void removeConsole(String id) {
+
     }
 
 }

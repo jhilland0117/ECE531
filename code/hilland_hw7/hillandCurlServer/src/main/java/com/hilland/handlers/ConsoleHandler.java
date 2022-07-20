@@ -51,8 +51,17 @@ public class ConsoleHandler extends GeneralHandler {
     }
 
     @Override
-    public Response post(UriResource uriResource, Map<String, String> urlParams, IHTTPSession session) {
-        return newFixedLengthResponse("received a post");
+    public Response post(
+            UriResource uriResource, 
+            Map<String, String> urlParams, 
+            IHTTPSession session) {
+        
+        for (String value : urlParams.values()) {
+            System.out.println("shoot " + value);
+        }
+        JDBCConnection connection = new JDBCConnection();
+        
+        return newFixedLengthResponse("post was successful");
     }
 
 }

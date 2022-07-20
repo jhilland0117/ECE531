@@ -47,6 +47,7 @@ public final class CurlCommandsUtil {
         try {
             session.parseBody(new HashMap<>());
             String requestBody = session.getQueryParameterString();
+            System.out.println("put: " + requestBody + "\n");
             String result = connection.addConsole(requestBody);
             return newFixedLengthResponse(result);
         } catch (IOException | NanoHTTPD.ResponseException e) {

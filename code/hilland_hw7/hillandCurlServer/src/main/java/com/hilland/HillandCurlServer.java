@@ -37,7 +37,6 @@ public class HillandCurlServer extends NanoHTTPD {
         } else if (session.getMethod() == Method.POST) {
             return CurlCommandsUtil.performPost(connection, session);
         } else if (session.getMethod() == Method.PUT) {
-            // just do a post until we have more use for separation
             return CurlCommandsUtil.performPost(connection, session);
         } else if (session.getMethod() == Method.DELETE) {
             return CurlCommandsUtil.performDelete(connection, session);

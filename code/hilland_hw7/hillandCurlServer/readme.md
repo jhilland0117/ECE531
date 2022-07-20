@@ -30,7 +30,7 @@ post
 `curl -X POST http://52.8.135.131:8080/ -d NAME`
 
 put
-
+`curl -X PUT http://52.8.135.131:8080/ -d NAME`
 
 delete
 `curl -X DELETE http://52.8.135.131:8080/id`

@@ -11,15 +11,17 @@ import java.util.List;
  */
 public class JDBCConnection {
 
+    private static final String DB_CONNECTION = "jdbc:mysql://127.0.0.1:3306/consoles";
+    private static final String ROOT = "root";
+    private static final String PASSWORD = "Brady#2019";
+
     // get request based on ID
     public Console getConsole(String id) {
 
         String select = "select * from console where id = " + id;
-        try ( Connection conn = DriverManager.getConnection(
-                "jdbc:mysql://127.0.0.1:3306/consoles", "root", "Brady#2019")) {
+        try ( Connection conn = setupConnection()) {
 
             Statement statement = conn.createStatement();
-
             ResultSet resultSet = statement.executeQuery(select);
             Console console = new Console();
             while (resultSet.next()) {
@@ -38,10 +40,10 @@ public class JDBCConnection {
         List<Console> consoles = new ArrayList<>();
         String select = "select * from console";
 
-        try ( Connection conn = DriverManager.getConnection(
-                "jdbc:mysql://127.0.0.1:3306/consoles", "root", "Brady#2019");  PreparedStatement preparedStatement = conn.prepareStatement(select)) {
+        try ( Connection conn = setupConnection()) {
 
-            ResultSet resultSet = preparedStatement.executeQuery();
+            Statement statement = conn.createStatement();
+            ResultSet resultSet = statement.executeQuery(select);
             while (resultSet.next()) {
 
                 Console obj = new Console();
@@ -61,10 +63,7 @@ public class JDBCConnection {
     // add a console to the database
     public String addConsole(String name) {
         String insert = "insert into console (name) values ('" + name + "')";
-        System.out.println(insert);
-        System.out.println("\n");
-        try ( Connection conn = DriverManager.getConnection(
-                "jdbc:mysql://127.0.0.1:3306/consoles", "root", "Brady#2019")) {
+        try ( Connection conn = setupConnection()) {
             Statement statement = (Statement) conn.createStatement();
             statement.execute(insert);
         } catch (SQLException ex) {
@@ -74,18 +73,10 @@ public class JDBCConnection {
         return "Post Successful\n";
     }
 
-    // update an already existing console
-    public String updateConsole(String id, String name) {
-        return addConsole(name);
-    }
-
     // delete console from database
     public String deleteConsole(String id) {
         String insert = "delete from console where id = " + id;
-        System.out.println(insert);
-        System.out.println("\n");
-        try ( Connection conn = DriverManager.getConnection(
-                "jdbc:mysql://127.0.0.1:3306/consoles", "root", "Brady#2019")) {
+        try ( Connection conn = setupConnection()) {
             Statement statement = (Statement) conn.createStatement();
             statement.execute(insert);
         } catch (SQLException ex) {
@@ -93,6 +84,10 @@ public class JDBCConnection {
             return "Delete Failed\n";
         }
         return "Delete Successful\n";
+    }
+
+    private Connection setupConnection() throws SQLException {
+        return DriverManager.getConnection(DB_CONNECTION, ROOT, PASSWORD);
     }
 
 }

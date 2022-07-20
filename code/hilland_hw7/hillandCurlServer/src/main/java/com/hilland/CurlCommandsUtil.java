@@ -15,6 +15,8 @@ import static fi.iki.elonen.NanoHTTPD.newFixedLengthResponse;
  * @author jhilland
  */
 public final class CurlCommandsUtil {
+    
+    private static final String NO_RESOURCE = "The requested resource does not exist";
 
     private CurlCommandsUtil() {
     }
@@ -60,7 +62,7 @@ public final class CurlCommandsUtil {
 
     public static NanoHTTPD.Response failedAttempt() {
         return newFixedLengthResponse(NanoHTTPD.Response.Status.NOT_FOUND, MIME_PLAINTEXT,
-                "The requested resource does not exist");
+                NO_RESOURCE);
     }
 
     private static String getIndex(String param) {

@@ -38,16 +38,22 @@ public class HillandCurlServer extends NanoHTTPD {
     public Response serve(IHTTPSession session) {
         if (session.getMethod() == Method.GET) {
 
-            // check for single query instance
+            String jsonResp = null;
             String param = getIndex(session.getUri());
-            System.out.println("GET: " + param);
-            List<Console> consoles = connection.getConsoles();
             Gson gson = new Gson();
-            String jsonResp = gson.toJson(consoles);
+
+            if (param != null && !param.equals("")) {
+                Console console = connection.getConsole(param);
+                jsonResp = gson.toJson(console);
+            } else {
+                List<Console> consoles = connection.getConsoles();
+                jsonResp = gson.toJson(consoles);
+            }
+            
             return newFixedLengthResponse(jsonResp);
-            
+
         } else if (session.getMethod() == Method.POST) {
-            
+
             System.out.println("received a post");
             try {
                 session.parseBody(new HashMap<>());
@@ -57,16 +63,16 @@ public class HillandCurlServer extends NanoHTTPD {
                 return failedAttempt();
             }
         } else if (session.getMethod() == Method.PUT) {
-            
+
             System.out.println("received a put");
         } else if (session.getMethod() == Method.DELETE) {
-            
+
             System.out.println("received a delete");
         }
-        
+
         return failedAttempt();
     }
-    
+
     private String getIndex(String param) {
         return param.replaceAll("[^0-9]", "");
     }

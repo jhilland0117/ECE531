@@ -15,7 +15,7 @@ import static fi.iki.elonen.NanoHTTPD.newFixedLengthResponse;
  * @author jhilland
  */
 public final class CurlCommandsUtil {
-    
+
     private static final String NO_RESOURCE = "The requested resource does not exist";
 
     private CurlCommandsUtil() {
@@ -47,7 +47,11 @@ public final class CurlCommandsUtil {
         try {
             session.parseBody(new HashMap<>());
             String requestBody = session.getQueryParameterString();
-            System.out.println("put: " + requestBody + "\n");
+
+            for (String value : session.getParameters().keySet()) {
+                System.out.println("put: " + value + "\n");
+            }
+
             String result = connection.addConsole(requestBody);
             return newFixedLengthResponse(result);
         } catch (IOException | NanoHTTPD.ResponseException e) {

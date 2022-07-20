@@ -64,6 +64,7 @@ public class HillandCurlServer extends NanoHTTPD {
             try {
                 session.parseBody(new HashMap<>());
                 String requestBody = session.getQueryParameterString();
+                connection.addConsole(requestBody);
                 return newFixedLengthResponse("Request body = " + requestBody);
             } catch (IOException | ResponseException e) {
                 return failedAttempt();
@@ -72,7 +73,7 @@ public class HillandCurlServer extends NanoHTTPD {
 
             System.out.println("received a put");
         } else if (session.getMethod() == Method.DELETE) {
-
+            
             System.out.println("received a delete");
         }
 

@@ -11,6 +11,7 @@ import java.util.List;
  */
 public class JDBCConnection {
 
+    // get request based on ID
     public Console getConsole(String id) {
 
         String select = "select * from console where id = '" + id + "'";
@@ -35,6 +36,7 @@ public class JDBCConnection {
         return null;
     }
 
+    // get list of objects to fill a table
     public List<Console> getConsoles() {
         List<Console> consoles = new ArrayList<>();
         String select = "select * from console";
@@ -62,6 +64,7 @@ public class JDBCConnection {
         return consoles;
     }
 
+    // add a console to the database
     public String addConsole(String name) {
         String insert = "insert into consoles (name) values (" + name + ")";
         Connection conn = null;
@@ -70,7 +73,6 @@ public class JDBCConnection {
             conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/consoles", "root", "Brady#2019");
             statement = (Statement) conn.createStatement();
             statement.execute(insert);
-            System.out.println("adding console to database");
         } catch (SQLException e) {
             System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
             return "FAILED POST\n";
@@ -80,11 +82,13 @@ public class JDBCConnection {
         return "SUCCESS POST\n";
     }
 
+    // update an already existing console
     public void updateConsole(String id, String name) {
 
     }
 
-    public void removeConsole(String id) {
+    // delete console from database
+    public void deleteConsoles(String id) {
 
     }
 

@@ -12,7 +12,6 @@ import java.util.List;
 public class JDBCConnection {
 
     public Console getConsole(String id) {
-        Console console = null;
 
         String select = "select * from console where id = '" + id + "'";
         try ( Connection conn = DriverManager.getConnection(
@@ -21,19 +20,19 @@ public class JDBCConnection {
             Statement statement = conn.createStatement();
             
             ResultSet resultSet = statement.executeQuery(select);
-
+            Console console = new Console();
             while (resultSet.next()) {       
-                console = new Console();
                 console.setId(resultSet.getLong("ID"));
                 console.setName(resultSet.getString("NAME"));
             }
+            return console;
         } catch (SQLException ex) {
             System.err.format("SQL State: %s\n%s", ex.getSQLState(), ex.getMessage());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
 
-        return console;
+        return null;
     }
 
     public List<Console> getConsoles() {

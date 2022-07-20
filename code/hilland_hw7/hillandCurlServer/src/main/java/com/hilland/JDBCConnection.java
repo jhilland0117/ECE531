@@ -14,7 +14,7 @@ public class JDBCConnection {
     public Console getConsole(String id) {
         Console console = null;
 
-        String select = "select * from console where id = " + id;
+        String select = "select * from console where id = '" + id + "'";
         System.out.println("running query: " + select + "\n");
         try ( Connection conn = DriverManager.getConnection(
                 "jdbc:mysql://127.0.0.1:3306/consoles", "root", "Brady#2019")) {
@@ -28,8 +28,8 @@ public class JDBCConnection {
                 long resultId = resultSet.getLong("ID");
                 String name = resultSet.getString("NAME");
                 
-                System.out.println(resultSet.getString(1));
-                System.out.println("we have a next!\n");
+                System.out.println("id: " + id + " name: " + name);
+                System.out.println("object: " + resultSet.getObject(1) + "\n");
                 Console obj = new Console();
                 console.setId(resultId);
                 console.setName(name);

@@ -60,7 +60,7 @@ public class JDBCConnection {
 
     // add a console to the database
     public String addConsole(String name) {
-        String insert = "insert into console (name) values (" + name + ")";
+        String insert = "insert into console (name) values ('" + name + "')";
         System.out.println(insert);
         System.out.println("\n");
         try ( Connection conn = DriverManager.getConnection(

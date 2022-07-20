@@ -39,7 +39,7 @@ public class HillandCurlServer extends NanoHTTPD {
         if (session.getMethod() == Method.GET) {
 
             // check for single query instance
-            String param = session.getUri();
+            String param = getIndex(session.getUri());
             System.out.println("GET: " + param);
             List<Console> consoles = connection.getConsoles();
             Gson gson = new Gson();
@@ -65,6 +65,10 @@ public class HillandCurlServer extends NanoHTTPD {
         }
         
         return failedAttempt();
+    }
+    
+    private String getIndex(String param) {
+        return param.replaceAll("[^0-9]", "");
     }
 
     private Response failedAttempt() {

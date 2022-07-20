@@ -73,8 +73,9 @@ public class HillandCurlServer extends NanoHTTPD {
 
             System.out.println("received a put");
         } else if (session.getMethod() == Method.DELETE) {
-            
-            System.out.println("received a delete");
+            String param = getIndex(session.getUri());
+            String result = connection.deleteConsole(param);
+            return newFixedLengthResponse(result);
         }
 
         return failedAttempt();

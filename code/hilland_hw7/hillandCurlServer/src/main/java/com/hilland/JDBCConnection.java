@@ -14,7 +14,7 @@ public class JDBCConnection {
     // get request based on ID
     public Console getConsole(String id) {
 
-        String select = "select * from console where id = '" + id + "'";
+        String select = "select * from console where id = " + id;
         try ( Connection conn = DriverManager.getConnection(
                 "jdbc:mysql://127.0.0.1:3306/consoles", "root", "Brady#2019")) {
 
@@ -69,19 +69,30 @@ public class JDBCConnection {
             statement.execute(insert);
         } catch (SQLException ex) {
             System.err.format("SQL State: %s\n%s", ex.getSQLState(), ex.getMessage());
-            return "FAILED POST\n";
+            return "Post Failed\n";
         }
-        return "SUCCESS POST\n";
+        return "Post Successful\n";
     }
 
     // update an already existing console
-    public void updateConsole(String id, String name) {
-
+    public String updateConsole(String id, String name) {
+        return addConsole(name);
     }
 
     // delete console from database
-    public void deleteConsoles(String id) {
-
+    public String deleteConsole(String id) {
+        String insert = "delete from console where id = " + id;
+        System.out.println(insert);
+        System.out.println("\n");
+        try ( Connection conn = DriverManager.getConnection(
+                "jdbc:mysql://127.0.0.1:3306/consoles", "root", "Brady#2019")) {
+            Statement statement = (Statement) conn.createStatement();
+            statement.execute(insert);
+        } catch (SQLException ex) {
+            System.err.format("SQL State: %s\n%s", ex.getSQLState(), ex.getMessage());
+            return "Delete Failed\n";
+        }
+        return "Delete Successful\n";
     }
 
 }

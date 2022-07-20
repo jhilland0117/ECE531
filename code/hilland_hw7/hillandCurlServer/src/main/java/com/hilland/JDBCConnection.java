@@ -14,7 +14,7 @@ public class JDBCConnection {
     public Console getConsole(String id) {
         Console console = null;
 
-        String select = "select " + id + " from console";
+        String select = "select name from console where id = " + id + ";";
 
         try ( Connection conn = DriverManager.getConnection(
                 "jdbc:mysql://127.0.0.1:3306/consoles", "root", "Brady#2019");  PreparedStatement preparedStatement = conn.prepareStatement(select)) {

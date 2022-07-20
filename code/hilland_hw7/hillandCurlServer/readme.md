@@ -1,5 +1,8 @@
 # Java curl receiving application running on AWS EC2 instance.
 
+# to use the script
+chmod +x scriptName.sh
+
 ## Required packages
 you will need to have the following installed
 java openjdk 11+
@@ -38,4 +41,4 @@ delete
 
 ## Running the code
 `mvn compile`
-`vn exec:java -Dexec.mainClass="com.hilland.HillandCurlServer"`
+`mvn exec:java -Dexec.mainClass="com.hilland.HillandCurlServer"`

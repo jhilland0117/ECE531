@@ -46,13 +46,7 @@ public final class CurlCommandsUtil {
     public static NanoHTTPD.Response performPost(JDBCConnection connection, NanoHTTPD.IHTTPSession session) {
         try {
             session.parseBody(new HashMap<>());
-            String requestBody = session.getQueryParameterString();
-
-            for (String value : session.getParameters().keySet()) {
-                System.out.println("put: " + value + "\n");
-            }
-
-            String result = connection.addConsole(requestBody);
+            String result = connection.addConsole(session.getQueryParameterString());
             return newFixedLengthResponse(result);
         } catch (IOException | NanoHTTPD.ResponseException e) {
             return failedAttempt();
@@ -60,8 +54,7 @@ public final class CurlCommandsUtil {
     }
 
     public static NanoHTTPD.Response performDelete(JDBCConnection connection, NanoHTTPD.IHTTPSession session) {
-        String param = getIndex(session.getUri());
-        String result = connection.deleteConsole(param);
+        String result = connection.deleteConsole(getIndex(session.getUri()));
         return newFixedLengthResponse(result);
     }
 

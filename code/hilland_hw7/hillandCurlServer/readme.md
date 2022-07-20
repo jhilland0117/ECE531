@@ -25,8 +25,10 @@ Public IP for this instance with httpdnano running is
 http://52.8.135.131:8080
 
 ## Commands
-get
+get index
 `curl http://52.8.135.131:8080/ # provides a list of all objects`
+
+get by id
 `curl http://52.8.135.131:8080/id # to query object based on id`
 
 post

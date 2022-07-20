@@ -67,11 +67,9 @@ public class JDBCConnection {
     // add a console to the database
     public String addConsole(String name) {
         String insert = "insert into consoles (name) values (" + name + ")";
-        Connection conn = null;
-        Statement statement = null;
         try {
-            conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/consoles", "root", "Brady#2019");
-            statement = (Statement) conn.createStatement();
+            Connection conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/consoles", "root", "Brady#2019");
+            Statement statement = (Statement) conn.createStatement();
             statement.execute(insert);
         } catch (SQLException e) {
             System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());

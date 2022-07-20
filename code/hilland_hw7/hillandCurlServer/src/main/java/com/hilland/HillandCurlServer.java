@@ -64,8 +64,8 @@ public class HillandCurlServer extends NanoHTTPD {
             try {
                 session.parseBody(new HashMap<>());
                 String requestBody = session.getQueryParameterString();
-                connection.addConsole(requestBody);
-                return newFixedLengthResponse("Request body = " + requestBody);
+                String result = connection.addConsole(requestBody);
+                return newFixedLengthResponse(result);
             } catch (IOException | ResponseException e) {
                 return failedAttempt();
             }

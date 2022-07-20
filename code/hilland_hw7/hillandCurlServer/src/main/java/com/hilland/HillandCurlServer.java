@@ -38,44 +38,15 @@ public class HillandCurlServer extends NanoHTTPD {
     public Response serve(IHTTPSession session) {
         if (session.getMethod() == Method.GET) {
 
-            String jsonResp = null;
-            String param = getIndex(session.getUri());
-            Gson gson = new Gson();
-
-            if (param != null && !param.equals("")) {
-                Console console = connection.getConsole(param);
-                if (console == null) {
-                    return failedAttempt();
-                }
-                jsonResp = gson.toJson(console);
-            } else {
-                List<Console> consoles = connection.getConsoles();
-                if (consoles.isEmpty()) {
-                    return failedAttempt();
-                }
-                jsonResp = gson.toJson(consoles);
-            }
-            
-            return newFixedLengthResponse(jsonResp);
+            return CurlCommandsUtil.performGet(connection, session);
 
         } else if (session.getMethod() == Method.POST) {
-
-            System.out.println("received a post");
-            try {
-                session.parseBody(new HashMap<>());
-                String requestBody = session.getQueryParameterString();
-                String result = connection.addConsole(requestBody);
-                return newFixedLengthResponse(result);
-            } catch (IOException | ResponseException e) {
-                return failedAttempt();
-            }
+            return CurlCommandsUtil.performPost(connection, session);
         } else if (session.getMethod() == Method.PUT) {
-
-            System.out.println("received a put");
+            // just do a post until we have more use for separation
+            return CurlCommandsUtil.performPost(connection, session);
         } else if (session.getMethod() == Method.DELETE) {
-            String param = getIndex(session.getUri());
-            String result = connection.deleteConsole(param);
-            return newFixedLengthResponse(result);
+            return CurlCommandsUtil.performDelete(connection, session);
         }
 
         return failedAttempt();

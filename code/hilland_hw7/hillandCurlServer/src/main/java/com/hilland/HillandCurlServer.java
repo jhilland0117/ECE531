@@ -40,6 +40,7 @@ public class HillandCurlServer extends NanoHTTPD {
 
             // check for single query instance
             String param = session.getUri();
+            System.out.println("GET: " + param);
             List<Console> consoles = connection.getConsoles();
             Gson gson = new Gson();
             String jsonResp = gson.toJson(consoles);

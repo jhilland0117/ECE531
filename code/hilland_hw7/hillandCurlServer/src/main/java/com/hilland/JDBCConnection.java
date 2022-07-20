@@ -17,22 +17,19 @@ public class JDBCConnection {
         String select = "select * from console where id = '" + id + "'";
         try ( Connection conn = DriverManager.getConnection(
                 "jdbc:mysql://127.0.0.1:3306/consoles", "root", "Brady#2019")) {
-            
+
             Statement statement = conn.createStatement();
-            
+
             ResultSet resultSet = statement.executeQuery(select);
             Console console = new Console();
-            while (resultSet.next()) {       
+            while (resultSet.next()) {
                 console.setId(resultSet.getLong("ID"));
                 console.setName(resultSet.getString("NAME"));
             }
             return console;
         } catch (SQLException ex) {
             System.err.format("SQL State: %s\n%s", ex.getSQLState(), ex.getMessage());
-        } catch (Exception ex) {
-            ex.printStackTrace();
         }
-
         return null;
     }
 
@@ -55,26 +52,23 @@ public class JDBCConnection {
 
             }
 
-        } catch (SQLException e) {
-            System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException ex) {
+            System.err.format("SQL State: %s\n%s", ex.getSQLState(), ex.getMessage());
         }
-
         return consoles;
     }
 
     // add a console to the database
     public String addConsole(String name) {
-        String insert = "insert into consoles (name) values (" + name + ")";
-        try {
-            Connection conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/consoles", "root", "Brady#2019");
+        String insert = "insert into console (name) values (" + name + ")";
+        System.out.println(insert);
+        System.out.println("\n");
+        try ( Connection conn = DriverManager.getConnection(
+                "jdbc:mysql://127.0.0.1:3306/consoles", "root", "Brady#2019")) {
             Statement statement = (Statement) conn.createStatement();
             statement.execute(insert);
-        } catch (SQLException e) {
-            System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
-            return "FAILED POST\n";
-        } catch (Exception e) {
+        } catch (SQLException ex) {
+            System.err.format("SQL State: %s\n%s", ex.getSQLState(), ex.getMessage());
             return "FAILED POST\n";
         }
         return "SUCCESS POST\n";

@@ -23,9 +23,9 @@ public class JDBCConnection {
             ResultSet resultSet = statement.executeQuery(select);
 
             while (resultSet.next()) {       
-                Console obj = new Console();
-                obj.setId(resultSet.getLong("ID"));
-                obj.setName(resultSet.getString("NAME"));
+                console = new Console();
+                console.setId(resultSet.getLong("ID"));
+                console.setName(resultSet.getString("NAME"));
             }
         } catch (SQLException ex) {
             System.err.format("SQL State: %s\n%s", ex.getSQLState(), ex.getMessage());

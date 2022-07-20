@@ -44,9 +44,15 @@ public class HillandCurlServer extends NanoHTTPD {
 
             if (param != null && !param.equals("")) {
                 Console console = connection.getConsole(param);
+                if (console == null) {
+                    return failedAttempt();
+                }
                 jsonResp = gson.toJson(console);
             } else {
                 List<Console> consoles = connection.getConsoles();
+                if (consoles.isEmpty()) {
+                    return failedAttempt();
+                }
                 jsonResp = gson.toJson(consoles);
             }
             

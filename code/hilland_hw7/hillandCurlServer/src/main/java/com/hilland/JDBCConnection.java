@@ -20,9 +20,11 @@ public class JDBCConnection {
                 "jdbc:mysql://127.0.0.1:3306/consoles", "root", "Brady#2019");  PreparedStatement preparedStatement = conn.prepareStatement(select)) {
 
             ResultSet result = preparedStatement.executeQuery();
-            Console obj = new Console();
-            console.setId(result.getLong("ID"));
-            console.setName(result.getString("NAME"));
+            while (result.next()) {
+                Console obj = new Console();
+                console.setId(result.getLong("ID"));
+                console.setName(result.getString("NAME"));
+            }
         } catch (SQLException ex) {
             System.err.format("SQL State: %s\n%s", ex.getSQLState(), ex.getMessage());
         } catch (Exception ex) {

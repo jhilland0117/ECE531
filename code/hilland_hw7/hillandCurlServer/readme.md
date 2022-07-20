@@ -22,7 +22,7 @@ get
 `curl http://52.8.135.131:8080/id # to query object based on id`
 
 post
-`curl -X POST http://52.8.135.131:8080/ -d "PS5"`
+`curl -X POST http://52.8.135.131:8080/ -d PS5`
 
 put
 
@@ -30,3 +30,7 @@ put
 delete
 `curl -X DELETE http://52.8.135.131:8080/id`
 
+
+## Running the code
+`mvn compile`
+`vn exec:java -Dexec.mainClass="com.hilland.HillandCurlServer"`

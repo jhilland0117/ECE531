@@ -7,9 +7,6 @@ import fi.iki.elonen.NanoHTTPD.Response;
 import java.io.IOException;
 import java.util.List;
 import com.google.gson.Gson;
-import com.hilland.handlers.ConsoleHandler;
-import fi.iki.elonen.router.RouterNanoHTTPD;
-import fi.iki.elonen.router.RouterNanoHTTPD.IndexHandler;
 import java.util.HashMap;
 
 /**
@@ -17,11 +14,13 @@ import java.util.HashMap;
  *
  * @author jhilland
  */
-public class HillandCurlServer extends RouterNanoHTTPD {
+public class HillandCurlServer extends NanoHTTPD {
+
+    private JDBCConnection connection;
 
     public HillandCurlServer() throws IOException {
         super(8080);
-        addMappings();
+        connection = new JDBCConnection();
         start(NanoHTTPD.SOCKET_READ_TIMEOUT, false);
     }
 
@@ -34,11 +33,38 @@ public class HillandCurlServer extends RouterNanoHTTPD {
             System.err.println("Couldn't start server:\n" + ioe);
         }
     }
-    
+
     @Override
-    public void addMappings() {
-        addRoute("/", IndexHandler.class);
-        addRoute("/consoles", ConsoleHandler.class);
+    public Response serve(IHTTPSession session) {
+        if (session.getMethod() == Method.GET) {
+
+            // check for single query instance
+            String param = session.getQueryParameterString();
+            System.out.println("GET: " + param);
+            List<Console> consoles = connection.getConsoles();
+            Gson gson = new Gson();
+            String jsonResp = gson.toJson(consoles);
+            return newFixedLengthResponse(jsonResp);
+            
+        } else if (session.getMethod() == Method.POST) {
+            
+            System.out.println("received a post");
+            try {
+                session.parseBody(new HashMap<>());
+                String requestBody = session.getQueryParameterString();
+                return newFixedLengthResponse("Request body = " + requestBody);
+            } catch (IOException | ResponseException e) {
+                return failedAttempt();
+            }
+        } else if (session.getMethod() == Method.PUT) {
+            
+            System.out.println("received a put");
+        } else if (session.getMethod() == Method.DELETE) {
+            
+            System.out.println("received a delete");
+        }
+        
+        return failedAttempt();
     }
 
     private Response failedAttempt() {

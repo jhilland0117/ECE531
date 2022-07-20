@@ -15,7 +15,6 @@ public class JDBCConnection {
         Console console = null;
 
         String select = "select * from console where id = '" + id + "'";
-        System.out.println("running query: " + select + "\n");
         try ( Connection conn = DriverManager.getConnection(
                 "jdbc:mysql://127.0.0.1:3306/consoles", "root", "Brady#2019")) {
             
@@ -24,15 +23,9 @@ public class JDBCConnection {
             ResultSet resultSet = statement.executeQuery(select);
 
             while (resultSet.next()) {       
-                
-                long resultId = resultSet.getLong("ID");
-                String name = resultSet.getString("NAME");
-                
-                System.out.println("id: " + id + " name: " + name);
-                System.out.println("object: " + resultSet.getObject(1) + "\n");
                 Console obj = new Console();
-                console.setId(resultId);
-                console.setName(name);
+                obj.setId(resultSet.getLong("ID"));
+                obj.setName(resultSet.getString("NAME"));
             }
         } catch (SQLException ex) {
             System.err.format("SQL State: %s\n%s", ex.getSQLState(), ex.getMessage());
@@ -53,12 +46,9 @@ public class JDBCConnection {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
 
-                long id = resultSet.getLong("ID");
-                String name = resultSet.getString("NAME");
-
                 Console obj = new Console();
-                obj.setId(id);
-                obj.setName(name);
+                obj.setId(resultSet.getLong("ID"));
+                obj.setName(resultSet.getString("NAME"));
 
                 consoles.add(obj);
 

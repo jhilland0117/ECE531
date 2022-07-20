@@ -16,13 +16,18 @@ All required applications dependencies are listed in the pom file.
 ## Database
 Simple database created for this application. Database name is "consoles." Contains a single table with id and name columns. It is only mean to prove the functionality of the java code.
 
+## AWS EC2
+Currently only allow port 8080 traffic, port ssh to my IP. 
+Public IP for this instance with httpdnano running is
+http://52.8.135.131:8080
+
 ## Commands
 get
 `curl http://52.8.135.131:8080/ # provides a list of all objects`
 `curl http://52.8.135.131:8080/id # to query object based on id`
 
 post
-`curl -X POST http://52.8.135.131:8080/ -d PS5`
+`curl -X POST http://52.8.135.131:8080/ -d NAME`
 
 put
 

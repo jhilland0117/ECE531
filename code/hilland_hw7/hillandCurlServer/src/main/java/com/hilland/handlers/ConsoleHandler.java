@@ -55,9 +55,9 @@ public class ConsoleHandler extends GeneralHandler {
             UriResource uriResource, 
             Map<String, String> urlParams, 
             IHTTPSession session) {
-        
-        System.out.println("heya " + uriResource.getUri());
-        
+                
+        String baseUri = uriResource.getUri();
+        System.out.println("here " + baseUri);
         for (String value : urlParams.values()) {
             System.out.println("shoot " + value);
         }

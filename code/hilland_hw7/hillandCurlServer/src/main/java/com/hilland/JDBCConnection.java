@@ -23,13 +23,12 @@ public class JDBCConnection {
             
             ResultSet resultSet = statement.executeQuery(select);
 
-            while (resultSet.next()) {
-                
-                System.out.println("something: " + resultSet.get);
+            while (resultSet.next()) {       
                 
                 long resultId = resultSet.getLong("ID");
                 String name = resultSet.getString("NAME");
                 
+                System.out.println(resultSet.getString(1));
                 System.out.println("we have a next!\n");
                 Console obj = new Console();
                 console.setId(resultId);

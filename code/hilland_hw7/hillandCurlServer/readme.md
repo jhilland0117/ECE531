@@ -1,7 +1,9 @@
 # Java curl receiving application running on AWS EC2 instance.
 
 # to use the script
-chmod +x scriptName.sh
+chmod +x compileAndRun.sh
+run script in background "daemonized"
+`nohup bash compileAndRun.sh &`
 
 ## Required packages
 you will need to have the following installed

@@ -1,0 +1,3 @@
+[submodule "code/hilland_final/thermocouple"]
+	path = code/hilland_final/thermocouple
+	url = https://github.com/cclamb/thermocouple
